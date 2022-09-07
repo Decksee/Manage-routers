@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:generate/components/base.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:dropdownfield2/dropdownfield2.dart';
 
 
 class RouteurDialog extends StatefulWidget {
@@ -21,6 +22,7 @@ class RouteurDialog extends StatefulWidget {
 }
 
 class _RouteurDialogState extends State<RouteurDialog> {
+
   final formKey = GlobalKey<FormState>();
   final DirectionController = TextEditingController();
   final FournisseurController = TextEditingController();
@@ -30,8 +32,11 @@ class _RouteurDialogState extends State<RouteurDialog> {
   final DateFAController = TextEditingController();
   final DateNOController = TextEditingController();
 
-  List<String> Routeurs=[
+  final Routeurs=[
     "DG",
+    "DA",
+    "DB",
+    "DZ",
     "DAF",
     "DSV",
     "DDTA",
@@ -40,6 +45,23 @@ class _RouteurDialogState extends State<RouteurDialog> {
     "PCA",
     "MÉDECIN CONSEIL",
 
+  ];
+
+  final Fournisseurs=[
+    "ISOCEL BENIN",
+    "OTI",
+    "CANALBOX BENIN",
+    "UNIVERCELL",
+    "JENY SAS",
+    "ABC CORPORATION",
+    "SUD TELECOM",
+    "ALINK TELECOM",
+    "FIRSTNET",
+    "A.I.T.A.I SA",
+    "SBIN",
+    "EUPHORBIA SARL",
+    "MOOV",
+    "MTN"
   ];
 
   @override
@@ -82,8 +104,8 @@ class _RouteurDialogState extends State<RouteurDialog> {
       content: Form(
         key: formKey,
         child: SizedBox(
-          width: 600,
-          height: 280,
+          width: 620,
+          height: 450,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -138,7 +160,20 @@ class _RouteurDialogState extends State<RouteurDialog> {
     );
   }
 
-  Widget buildDirection() => TextFormField(
+  Widget buildDirection() =>DropDownField(
+      controller: DirectionController,
+      required: true,
+      strict: true,
+      labelText: 'Nom de la Direction',
+      labelStyle: GoogleFonts.montserrat(
+        fontSize: 15
+      ),
+      icon: const Icon(FontAwesomeIcons.nfcDirectional, color: Colors.grey, size:15),
+      items: Routeurs,
+  );
+
+
+  /*Widget buildDirection() => TextFormField(
         controller: DirectionController,
         style: GoogleFonts.montserrat(
           fontSize: 15,
@@ -154,10 +189,23 @@ class _RouteurDialogState extends State<RouteurDialog> {
           ),
         ),
         validator: (name) =>
-            name != null && name.isEmpty ? 'Enter a name' : null,
-      );
+            name != null && name.isEmpty ? 'Ce champ est requis' : null,
+      );*/
 
-  Widget buildFournisseur() => TextFormField(
+  Widget buildFournisseur() =>DropDownField(
+    controller: FournisseurController,
+    required: true,
+    strict: true,
+    labelText: 'Nom du Fournisseur',
+    labelStyle: GoogleFonts.montserrat(
+        fontSize: 15
+    ),
+    icon:const Icon(FontAwesomeIcons.server, color: Colors.grey, size:15),
+    items: Fournisseurs,
+  );
+
+
+  /*Widget buildFournisseur() => TextFormField(
         controller: FournisseurController,
         style: GoogleFonts.montserrat(
       fontSize: 15,
@@ -173,8 +221,8 @@ class _RouteurDialogState extends State<RouteurDialog> {
           ),
         ),
         validator: (name) =>
-            name != null && name.isEmpty ? 'Enter a name' : null,
-      );
+            name != null && name.isEmpty ? 'Ce champ est requis' : null,
+      );*/
 
   Widget buildCodeBox() => TextFormField(
         controller: CodeBoxController,
@@ -192,7 +240,7 @@ class _RouteurDialogState extends State<RouteurDialog> {
           ),
         ),
         validator: (name) =>
-            name != null && name.isEmpty ? 'Enter a name' : null,
+            name != null && name.isEmpty ? 'Ce champ est requis' : null,
       );
 
   Widget buildDateA() => TextFormField(
@@ -223,10 +271,8 @@ class _RouteurDialogState extends State<RouteurDialog> {
               });
             }
           },
-
-
         validator: (name) =>
-            name != null && name.isEmpty ? 'Enter a name' : null,
+            name != null && name.isEmpty ? 'Ce champ est requis' : null,
       );
 
   Widget buildDateFA() => TextFormField(
@@ -298,14 +344,14 @@ class _RouteurDialogState extends State<RouteurDialog> {
         ),
         keyboardType: TextInputType.number,
         validator: (numbersim) => numbersim != null && double.tryParse(numbersim) == null
-            ? 'Enter a valid number'
+            ? 'Ce champ est requis'
             : null,
         controller: NumberSimController,
       );
 
 
   Widget buildCancelButton(BuildContext context) => TextButton(
-        child: Text('Cancel',
+        child: Text('Annuler',
           style: GoogleFonts.montserrat(
             fontSize: 15,
             color: Colors.deepOrange,
@@ -318,7 +364,6 @@ class _RouteurDialogState extends State<RouteurDialog> {
   Widget buildAddButton(BuildContext context, {required bool isEditing}) {
     final text = isEditing ? 'Sauvegarder' : 'Ajouter';
     final text2 = isEditing ? 'Routeur modifié' : 'Routeur ajouté';
-
     return TextButton(
       child: Text(text,
         style: GoogleFonts.montserrat(
@@ -337,7 +382,6 @@ class _RouteurDialogState extends State<RouteurDialog> {
           DateTime datetemp3;
           datetemp2=datetemp1.add(const Duration(days: 90));
           datetemp3=datetemp1.add(const Duration(days: 61));
-
           final Direction = DirectionController.text;
           final Fournisseur = FournisseurController.text;
           final CodeBox = CodeBoxController.text;

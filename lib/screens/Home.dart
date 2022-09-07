@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
+import 'package:local_notifier/local_notifier.dart';
 
 import '../boxes.dart';
 import '../components/base.dart';
+
 import '../widgets/routeur_dialog.dart';
 
 class Home extends StatefulWidget {
@@ -20,6 +22,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final List<base> Bases =[];
 
+  bool selected=false;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,14 @@ class _HomeState extends State<Home> {
 
     super.dispose();
   }
+
+  final localNotifier = LocalNotifier.instance;
+
+  final notification = LocalNotification(
+    title: "Gestion des box internet",
+    body: 'Un abonnement va bientot prendre fin. Veuillez consulter le logiciel pour déclencher les démarches administratives',
+    silent: true,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +81,6 @@ class _HomeState extends State<Home> {
                             color: Color(0xff046ECE),
                             borderRadius: BorderRadius.only(
                                 bottomLeft:Radius.circular(40),
-                                topRight: Radius.circular(40)
                             )
                         ),
                         child: Padding(
@@ -112,6 +123,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 30,),
                     Expanded(
                       flex: 3,
@@ -182,11 +194,8 @@ class _HomeState extends State<Home> {
 
   Widget buildContentNotif(List<base> bases) {
     if (bases.isEmpty) {
-      return const Center(
-        child: Text(
-          '',
-          style: TextStyle(fontSize: 24),
-        ),
+      return Center(
+        child: Container(),
       );
     } else {
 
@@ -199,7 +208,6 @@ class _HomeState extends State<Home> {
               itemCount: bases.length,
               itemBuilder: (BuildContext context, int index) {
                 final Bases = bases[index];
-
                 return buildBasesNotif(context, Bases);
               },
             ),
@@ -215,168 +223,170 @@ class _HomeState extends State<Home> {
       ) {
 
     return Container(
-            height: 160,
-            margin: const EdgeInsets.only(left: 40,top: 5, bottom: 5, right: 10),
-            padding: const EdgeInsets.only(left: 40, top: 20, bottom: 10, right: 30),
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                    left: BorderSide(width: 15, color: Colors.green)
-                )
+      height: 100,
+      margin: const EdgeInsets.only(left: 40,top: 5, bottom: 5, right: 10),
+      padding: const EdgeInsets.only(left: 40, top: 20, bottom: 10, right: 30),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+              left: BorderSide(width: 15, color: Colors.green)
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: Offset(2.0, 2.0),
+              blurRadius: 3.0,
+              spreadRadius: 1.0,
             ),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(Bases.Direction,
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            //fontStyle: FontStyle.italic,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: Offset(-2.0, -2.0),
+              blurRadius: 3.0,
+              spreadRadius: 1.0,
+            ),
+          ]
+      ),
+
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text("Direction:",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          //fontStyle: FontStyle.italic,
+                          color: const Color.fromRGBO(0, 0, 0, 0.8)
                       ),
-                      Text(Bases.Fournisseur,
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            //fontStyle: FontStyle.italic,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
+                    ),
+                    const SizedBox(width: 5,),
+                    Text(Bases.Direction,
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          //fontStyle: FontStyle.italic,
+                          color: const Color.fromRGBO(0, 0, 0, 0.8)
                       ),
-                      Text(DateFormat('yyyy-MM-dd').format(Bases.DateFA),
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            //fontStyle: FontStyle.italic,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("Fournisseur:",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          //fontStyle: FontStyle.italic,
+                          color: const Color.fromRGBO(0, 0, 0, 0.8)
                       ),
-                      const Icon(FontAwesomeIcons.arrowDown, color: Color.fromRGBO(0, 0, 0, 0.3), size: 25,),
-                    ],
+                    ),
+                    const SizedBox(width: 5,),
+                    Text(Bases.Fournisseur,
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          //fontStyle: FontStyle.italic,
+                          color: const Color.fromRGBO(0, 0, 0, 0.8)
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(DateFormat('yyyy-MM-dd').format(Bases.DateFA),
+                      style: GoogleFonts.montserrat(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          //fontStyle: FontStyle.italic,
+                          color: const Color.fromRGBO(0, 0, 0, 0.8)
+                      ),
+                    ),
+                  ],
+                ),
+                const Icon(FontAwesomeIcons.arrowDown, color: Color.fromRGBO(0, 0, 0, 0.3), size: 20,),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RouteurDialog(
+                        Base:Bases,
+                        onClickedDone: ( Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO) =>
+                            editbase( Bases,Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO),
+                      ),
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Text("Numéro SIM:",
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
-                      ),
-                      const SizedBox(width: 10,),
-                      Text(Bases.NumberSim.toString(),
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
-                      ),
-                      const SizedBox(width: 30,),
-                      Text("|",
-                        style: GoogleFonts.montserrat(
-                            fontSize: 23,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromRGBO(0, 0, 0, 0.4)
-                        ),
-                      ),
-                      const SizedBox(width: 20,),
-                      Text("Date abonnement",
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
-                      ),
-                      const SizedBox(width: 10,),
-                      Text(DateFormat('yyyy-MM-dd').format(Bases.DateA),
-                        style: GoogleFonts.montserrat(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromRGBO(0, 0, 0, 0.8)
-                        ),
-                      ),
-                    ],
+                  child: Text("Voir",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blue,),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text("CodeBox:",
-                            style: GoogleFonts.montserrat(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: const Color.fromRGBO(0, 0, 0, 0.8)
-                            ),
-                          ),
-                          const SizedBox(width: 10,),
-                          Text(Bases.CodeBox,
-                            style: GoogleFonts.montserrat(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: const Color.fromRGBO(0, 0, 0, 0.8)
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => RouteurDialog(
-                                  Base:Bases,
-                                  onClickedDone: ( Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO) =>
-                                      editbase( Bases,Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO),
-                                ),
-                              ),
-                            ),
-                            child: Text("Modifier",
-                              style: GoogleFonts.montserrat(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.blue,),
-                            ),
-                          ), const SizedBox(width: 30,),
-                          InkWell(
-                            onTap: () => deletebase(Bases),
-                            child: Text("Supprimer",
-                              style: GoogleFonts.montserrat(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                  color:  Colors.red
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                ), const SizedBox(width: 30,),
+                InkWell(
+                  onTap: () => deletebase(Bases),
+                  child: Text("Supprimer",
+                    style: GoogleFonts.montserrat(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color:  Colors.red
+                    ),
                   ),
-                ]
+                ),
+              ],
             )
-        );
+          ]
+      ),
+    );
   }
 
   Widget buildBasesNotif(
       BuildContext context,
       base Bases,
       ) {
-
     return
-      DateFormat('yyyy-MM-dd').format(Bases.DateNO)==DateFormat('yyyy-MM-dd').format(DateTime.now())?
-      Container(
-        height: 200,
+      DateFormat('yyyy-MM-dd').format(Bases.DateNO)==DateFormat('yyyy-MM-dd').format(DateTime.now())
+        ?buildBN(context, Bases)
+        :Container();
+  }
+
+  Widget buildBN(
+      BuildContext context,
+      base Bases
+      )
+  {
+    localNotifier.notify(notification);
+    return
+      DateFormat('yyyy-MM-dd').format(Bases.DateNO)==DateFormat('yyyy-MM-dd').format(DateTime.now())
+      ?Container(
+        height: 218,
         margin: const EdgeInsets.only(left: 40,top: 5, bottom: 5, right: 10),
         padding: const EdgeInsets.only(left: 10, top: 20, bottom: 10, right: 10),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
             color: Colors.white,
-            border: Border(
-                right: BorderSide(width: 15, color: Colors.deepOrange)
-            )
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(255, 87, 34, 0.2),
+                offset: Offset(2.0, 2.0),
+                blurRadius: 3.0,
+                spreadRadius: 1.0,
+              ),
+              BoxShadow(
+                color: Color.fromRGBO(255, 87, 34, 0.2),
+                offset: Offset(-2.0, -2.0),
+                blurRadius: 3.0,
+                spreadRadius: 1.0,
+              ),
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(20))
         ),
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -480,20 +490,45 @@ class _HomeState extends State<Home> {
                     child: Text("Veuillez renouvelez avant la fin de votre abonnement",
                       textAlign: TextAlign.right,
                       style: GoogleFonts.montserrat(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.deepOrange,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.deepOrange,
                       ),
                     ),
                   ),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:5.0),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 10,),
+                    InkWell(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => RouteurDialog(
+                              Base:Bases,
+                              onClickedDone: ( Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO) =>
+                                  editbase( Bases,Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO),
+                            ),
+                          ),
+                        ),
+                        child: Icon(FontAwesomeIcons.penToSquare, size: 18,color: Color(0xff046ECE),)
+                    ),
+                    const SizedBox(width: 10,),
+                    InkWell(
+                        onTap: () => deletebase(Bases),
+                        child: Icon(Icons.delete_sweep_outlined, size: 20,color: Colors.deepOrange,)
+                    ),
+                  ],
+                ),
               )
 
 
             ]
         )
     )
-        :Container();
+      :Container();
   }
 
 
@@ -548,158 +583,3 @@ class _HomeState extends State<Home> {
   }
 
 }
-
-/*Widget _buildPopupDialog(BuildContext context) {
-
-  final _formKey = GlobalKey<FormState>();
-  Routeur route = Routeur.empty();
-  TextEditingController _txtDirection = TextEditingController();
-  TextEditingController _txtFournisseur = TextEditingController();
-  RouteurDAO  _routeurDAO = RouteurDAO();
-
-
-  void Message(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  void addofbase() async {
-    try {
-      Routeur retorno = await _routeurDAO.add(route);
-      route.id = retorno.id;
-      Message('Box ajouté avec succès');
-      //setState(() {});
-    } catch (error) {
-      print(error);
-      Message("Erreur lors de l'ajout");
-    }
-  }
-
-  void save() {
-    route.Direction = _txtDirection.text;
-    route.Fournisseur = _txtFournisseur.text;
-    if (route.id == null) {
-      addofbase();
-      return;
-    }
-  }
-
-
-
-
-  return AlertDialog(
-    title: const Center(child: Text("Enregistrer une nouvelle box",textAlign:TextAlign.center,style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),)),
-    content: Container(
-      width: 400,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Form(
-            key: _formKey,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 45,
-                    child: TextFormField(
-                      controller: _txtDirection,
-                      style: GoogleFonts.montserrat(
-                        color: const Color.fromRGBO(0, 0, 0, 0.7),
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      cursorColor:Colors.grey,
-                      decoration:  InputDecoration(
-                        hintText: "Le nom de la Direction",
-                        hintStyle: GoogleFonts.montserrat(
-                            color: Colors.grey,
-                            fontSize:18,
-                            fontWeight: FontWeight.w400
-                        ),
-                        focusColor: Colors.white,
-                        border: InputBorder.none,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey, width: 0.0),
-                          borderRadius: BorderRadius.circular(7.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Colors.grey, width: 1.0),
-                          borderRadius: BorderRadius.circular(7.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Complètez de champ';
-                        }
-                        return null;
-                      },
-
-                    ),
-                  ),
-                  const SizedBox(height:20),
-                  SizedBox(
-                    height: 45,
-                    child: TextFormField(
-                      controller: _txtFournisseur,
-                      style: GoogleFonts.montserrat(
-                        color: const Color.fromRGBO(0, 0, 0, 0.7),
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      cursorColor:Colors.grey,
-                      decoration:  InputDecoration(
-                        hintText: "Le nom du Fournisseur",
-                        hintStyle: GoogleFonts.montserrat(
-                            color: Colors.grey,
-                            fontSize:18,
-                            fontWeight: FontWeight.w400
-                        ),
-                        focusColor: Colors.white,
-                        border: InputBorder.none,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey, width: 0.0),
-                          borderRadius: BorderRadius.circular(7.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                          const BorderSide(color: Colors.grey, width: 1.0),
-                          borderRadius: BorderRadius.circular(7.0),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Complètez de champ';
-                        }
-                        return null;
-                      },
-
-                    ),
-                  ),
-                ],
-              )
-          )
-        ],
-      ),
-    ),
-    actions: <Widget>[
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: const Text('Cancel', style: TextStyle(color: Colors.red),),
-      ),
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: InkWell(
-          onTap:  () {
-            if (_formKey.currentState!.validate())
-            {save();}
-          },
-            child: const Text('Enregistrer', style: TextStyle(color: Colors.green),)),
-      ),
-    ],
-  );
-}*/

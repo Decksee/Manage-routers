@@ -44,7 +44,16 @@ dependencies:
   # format dates
   intl: ^0.17.0
   google_fonts: ^3.0.1
+
   font_awesome_flutter: ^10.1.0
+  dropdown_formfield: ^0.1.4
+  flutter_local_notifications: ^9.9.1
+  desktop_window: ^0.4.0
+  provider: ^6.0.3
+  local_notifier: ^0.1.5
+  launch_at_startup: ^0.1.9
+  package_info_plus: ^1.4.3+1
+  dropdownfield2: ^1.0.7
 
 dev_dependencies:
   flutter_test:
