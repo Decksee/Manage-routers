@@ -34,9 +34,6 @@ class _RouteurDialogState extends State<RouteurDialog> {
 
   final Routeurs=[
     "DG",
-    "DA",
-    "DB",
-    "DZ",
     "DAF",
     "DSV",
     "DDTA",

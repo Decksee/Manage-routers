@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -162,6 +164,13 @@ class _HomeState extends State<Home> {
     );
   }
 
+  /*fonctionTimer(time){
+    return Timer(Duration(seconds: 5), () {
+      buildContentNotif(time);
+    }
+    );
+  }*/
+
   Widget buildContent(List<base> bases) {
     if (bases.isEmpty) {
       return const Center(
@@ -225,7 +234,7 @@ class _HomeState extends State<Home> {
     return Container(
       height: 100,
       margin: const EdgeInsets.only(left: 40,top: 5, bottom: 5, right: 10),
-      padding: const EdgeInsets.only(left: 40, top: 20, bottom: 10, right: 30),
+      padding: const EdgeInsets.only(left: 30, top: 20, bottom: 10, right: 30),
       decoration: BoxDecoration(
           color: Colors.white,
           border: Border(
@@ -277,20 +286,12 @@ class _HomeState extends State<Home> {
                 ),
                 Row(
                   children: [
-                    Text("Fournisseur:",
-                      style: GoogleFonts.montserrat(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
-                          //fontStyle: FontStyle.italic,
-                          color: const Color.fromRGBO(0, 0, 0, 0.8)
-                      ),
-                    ),
+
                     const SizedBox(width: 5,),
                     Text(Bases.Fournisseur,
                       style: GoogleFonts.montserrat(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          //fontStyle: FontStyle.italic,
                           color: const Color.fromRGBO(0, 0, 0, 0.8)
                       ),
                     ),
@@ -302,7 +303,6 @@ class _HomeState extends State<Home> {
                       style: GoogleFonts.montserrat(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          //fontStyle: FontStyle.italic,
                           color: const Color.fromRGBO(0, 0, 0, 0.8)
                       ),
                     ),
@@ -353,7 +353,7 @@ class _HomeState extends State<Home> {
       base Bases,
       ) {
     return
-      DateFormat('yyyy-MM-dd').format(Bases.DateNO)==DateFormat('yyyy-MM-dd').format(DateTime.now())
+      DateFormat('yyyy-MM-dd').format(Bases.DateA)==DateFormat('yyyy-MM-dd').format(DateTime.now())
         ?buildBN(context, Bases)
         :Container();
   }
@@ -365,9 +365,9 @@ class _HomeState extends State<Home> {
   {
     localNotifier.notify(notification);
     return
-      DateFormat('yyyy-MM-dd').format(Bases.DateNO)==DateFormat('yyyy-MM-dd').format(DateTime.now())
+      DateFormat('yyyy-MM-dd').format(Bases.DateA)==DateFormat('yyyy-MM-dd').format(DateTime.now())
       ?Container(
-        height: 218,
+        height: 205,
         margin: const EdgeInsets.only(left: 40,top: 5, bottom: 5, right: 10),
         padding: const EdgeInsets.only(left: 10, top: 20, bottom: 10, right: 10),
         decoration: BoxDecoration(
@@ -482,7 +482,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              const SizedBox( height: 10,),
+              const SizedBox( height: 18,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -498,33 +498,6 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top:5.0),
-                child: Row(
-                  children: [
-                    const SizedBox(width: 10,),
-                    InkWell(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => RouteurDialog(
-                              Base:Bases,
-                              onClickedDone: ( Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO) =>
-                                  editbase( Bases,Direction, Fournisseur, NumberSim, CodeBox, DateA, DateFA, DateNO),
-                            ),
-                          ),
-                        ),
-                        child: Icon(FontAwesomeIcons.penToSquare, size: 18,color: Color(0xff046ECE),)
-                    ),
-                    const SizedBox(width: 10,),
-                    InkWell(
-                        onTap: () => deletebase(Bases),
-                        child: Icon(Icons.delete_sweep_outlined, size: 20,color: Colors.deepOrange,)
-                    ),
-                  ],
-                ),
-              )
-
-
             ]
         )
     )
